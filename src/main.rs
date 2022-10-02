@@ -1,7 +1,6 @@
-use std::io;
 mod util;
 mod tensor;
 
 fn main() {
-    util::parser::parse_args();
+    let mut cfg = util::parser::parse_args();
 }

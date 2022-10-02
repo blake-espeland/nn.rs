@@ -7,8 +7,6 @@ pub struct Shape{
     size: DimT
 }
 
-
-
 impl Shape {
     pub fn calc_size(i: &Vec<DimT>) -> DimT{
         let mut s: DimT = 1;
@@ -32,4 +30,10 @@ impl Shape {
     }
 
     pub fn ndims(&self) -> &usize { &self.ndims }
+}
+
+impl Default for Shape{
+    fn default() -> Shape{
+        Shape{ndims: 0, dims: Vec::new(), size: 0}
+    }
 }

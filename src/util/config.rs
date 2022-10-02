@@ -2,14 +2,19 @@ use crate::tensor::shape as shape;
 use shape::DimT as DimT;
 
 pub struct Config{
-    cfg_path: String,
-    input_shape: shape::Shape,
-    output_shape: shape::Shape,
-    n_layers: i32,
+    pub cfg_path: String,
+    pub input_shape: shape::Shape,
+    pub output_shape: shape::Shape,
+    pub n_layers: i32,
 }
 
-impl Config{
-    pub fn set_ishape(c: &mut Config, i: &Vec<DimT>) -> (){
-        c.input_shape.set_dims(i);
+impl Default for Config{
+    fn default() -> Config{
+        Config{
+            cfg_path: String::new(), 
+            input_shape: shape::Shape::default(), 
+            output_shape: shape::Shape::default(),
+            n_layers: 0
+        }
     }
 }
