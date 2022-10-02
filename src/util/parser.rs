@@ -1,6 +1,9 @@
+extern crate yaml_rust;
+
 use super::config as config;
 use std::env;
 use std::fs;
+use yaml_rust::YamlLoader;
 
 
 pub fn parse_args() -> config::Config{
@@ -16,5 +19,8 @@ pub fn parse_args() -> config::Config{
 
     println!("{:?}", yaml_contents);
 
-    cfg
+    let yaml = YamlLoader::load_from_str(yaml_contents.as_str()).unwrap()[0];
+
+    cfg.input_shape = yaml["input_shape"].as_vec();
+    cfg.output_shape = yaml["output_vector"].as_vec()
 }
