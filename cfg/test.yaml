@@ -1,0 +1,15 @@
+type: "cnn"
+
+layers:
+  - input:
+    - nodes: 6
+    - activation: "relu"
+  - hidden1:
+    - nodes: 4
+    - activation: "relu"
+  - hidden2:
+    - nodes: 5
+    - activation: "relu"
+  - output:
+    - nodes: 3
+    - activation: "relu"
