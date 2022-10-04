@@ -1,6 +1,7 @@
 
 pub type DimT = i64;
 
+#[derive(Clone)]
 pub struct Shape{
     ndims: usize,
     dims: Vec<DimT>,

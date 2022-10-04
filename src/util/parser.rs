@@ -15,7 +15,7 @@ fn yaml_arr_to_dim (y: &Vec<Yaml>) -> Vec<DimT>{
 }
 
 pub fn parse_args() -> config::Config{
-    let REQ_YAML_FIELDS = ["input_shape", "output_shape", "type"];
+    // static REQ_YAML_FIELDS: [&str; 3] = ["input_shape", "output_shape", "type"];
 
     let cla: Vec<String> = env::args().collect();
     let mut cfg: config::Config = config::Config::default();

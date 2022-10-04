@@ -1,15 +1,13 @@
 use super::connection::{*};
 
-pub type Nval = f32;
-
 pub struct Node{
-    val: Nval,
+    val: c_float,
     forward: Vec<Connection>,
     backward: Vec<Connection>
 }
 
 impl Node{
-    pub fn update(&mut self, new: Nval){
+    pub fn update(&mut self, new: c_float){
         self.val = new;
     }
 }
