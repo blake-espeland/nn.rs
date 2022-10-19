@@ -9,6 +9,6 @@ edition = "2018"
 [dependencies]
 rand = "0.8.3"
 regex = "1"
-yaml-rust = "0.4.5"
+json = "0.12.4"
 num = "0.1.25"
 ndarray = "0.15.6"

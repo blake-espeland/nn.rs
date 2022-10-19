@@ -1,0 +1,24 @@
+{
+  "Layers": [
+    {
+      "type": "FCLayer",
+      "nodes": 4,
+      "activation": "relu"
+    },
+    {
+      "type": "FCLayer",
+      "nodes": 4,
+      "activation": "relu"
+    },
+    {
+      "type": "FCLayer",
+      "nodes": 4,
+      "activation": "relu"
+    },
+    {
+      "type": "FCLayer",
+      "nodes": 4,
+      "activation": "relu"
+    }
+  ]
+}
