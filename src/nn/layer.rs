@@ -1,17 +1,8 @@
-use ndarray::{Array, Array1, Array2, Array3,
-              ArrayView1, ArrayView2, ArrayView3, 
-              Shape, Dimension, Dim, Ix};
+use ndarray::Array;
 
 use super::activation::*;
+use super::{CostType, Activation};
 use crate::util::dtypes::*;
-
-enum LayerType{
-    Connected, Conv, Normalization, Cost
-}
-
-enum CostType{
-    SSE, Masked, L1, Seg, Smooth, WGAN
-}
 
 /*
 // layer.h
@@ -285,7 +276,6 @@ pub struct Layer {
     
     pub act: ActFn,
     pub act_b: GradFn,
-    pub update: Int, // Update function
 
     pub layer_delta: FloatArr,
     pub output: FloatArr,
@@ -309,4 +299,11 @@ pub struct Layer {
     pub stride_y: Int,
     pub pad_x: Int,
     pub pad_y: Int,
+}
+
+
+trait LayerTrait {
+    fn forward() -> ();
+    fn backward() -> ();
+    fn update() -> ();
 }

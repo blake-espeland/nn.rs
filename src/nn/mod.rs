@@ -30,3 +30,11 @@ pub enum LearningRatePolicy{
     Sig,
     Random
 }
+
+pub enum LayerType{
+    Connected, Conv, Normalization, Cost
+}
+
+pub enum CostType{
+    SSE, Masked, L1, Seg, Smooth, WGAN
+}
