@@ -1,5 +1,7 @@
 use super::config as config;
 use super::config::Config;
+use crate::nn::network::Network;
+
 use json::JsonValue;
 use json::stringify;
 
@@ -10,7 +12,7 @@ fn json_val_to_string(j: &JsonValue) -> String {
     String::from(j.as_str().unwrap_or(""))
 }
 
-pub fn parse_cfg(path: &str) -> Config{
+pub fn parse_cfg(path: &str){
     println!("Reading model config from: {}", path);
 
     // Read config file from filesystem
@@ -27,10 +29,9 @@ pub fn parse_cfg(path: &str) -> Config{
     for layer in layers.members(){
         layer_v.push(layer.clone());
     }
-
-    Config { 
-        cfg_path: String::from(path),
-        n_layers: layers.len(), 
-        layers: layer_v
-    }
 }
+
+impl Network {
+
+}
+

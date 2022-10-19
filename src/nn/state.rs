@@ -1,18 +1,19 @@
+use crate::util::dtypes::*;
+use ndarray::Array;
 
-
-pub struct NetworkState;
-
+use super::network::Network;
 
 /*
-
-typedef struct network_state {
-    float *truth;
-    float *input;
-    float *delta;
-    float *workspace;
-    int train;
-    int index;
-    network net;
-} network_state;
-
+Maintains the state of the network during training and inference.
 */
+pub struct NetworkState {
+    truth: Array<Float, usize>, // Data loaded from dataloader
+    input: Array<Float, usize>, // input to current layer
+    delta: Array<Float, usize>, // for backprop
+
+    workspace: Array<Float, usize>, // Not sure
+
+    train: bool,  // Are we training?
+    index: Int,   // What layer?
+    net: Network, // Container for network layers and hyperparameters
+}

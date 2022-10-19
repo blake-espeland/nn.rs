@@ -1,33 +1,27 @@
 use crate::util::dtypes::Float;
 use super::layer::Layer;
 use super::state::NetworkState;
+use super::Activation;
 
-use ndarray::{Array, ArrayView, arr1, Ix, ArrayView1, Array1};
+use ndarray::{Array, ArrayView, Ix, ArrayView1, Array1};
 
-pub type act_t = fn(l: &mut Layer, s: &mut NetworkState) -> ();
-pub type grad_t = fn(x: Float) -> Float;
+pub type ActFn = fn(l: &mut Layer, s: &mut NetworkState) -> ();
+pub type GradFn = fn(x: Float) -> Float;
 
-#[allow(non_camel_case_types)]
-pub enum ACTIVATION{
-    ID,
-    RELU,
-    MISH,
-    SWISH,
-    LOGISTIC
-}
 
-pub fn get_act_f(a: &ACTIVATION) -> act_t{
+
+pub fn get_act_f(a: &Activation) -> ActFn{
     match a {
-        ID => {id}
-        RELU => {relu}
+        Activation::ID => {id}
+        Activation::Relu => {relu}
         _ => {relu}
     }
 }
 
-pub fn get_gradient(a: &ACTIVATION) -> grad_t{
+pub fn get_gradient(a: &Activation) -> GradFn{
     match a {
-        ID => {id_grad}
-        RELU => {relu_grad}
+        Activation::ID => {id_grad}
+        Activation::Relu => {relu_grad}
         _ => {id_grad}
     }
 }
@@ -39,7 +33,7 @@ Applies activation to an array of values
     x -> data to be activated on
     d -> dimensionality of data
 */ 
-pub fn activate_array<D>(x: &mut Array<Float, D>, d: Ix, a: ACTIVATION) -> (){
+pub fn activate_array<D>(x: &mut Array<Float, D>, d: Ix, a: Activation) -> (){
     
 }
 

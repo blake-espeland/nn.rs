@@ -1,12 +1,46 @@
+use ndarray::Array;
+
+use crate::util::dtypes::*;
+use super::layer::Layer;
+use super::LearningRatePolicy;
 
 
-enum learning_rate_policy{
-    constant,
-    step,
-    poly,
-    steps,
-    sig,
-    random
+pub struct UpdateArgs {
+    cbatch: Int,
+    lr: Float,
+    momentum: Float,
+    decay: Float,
+    adam: Int,
+    B1: Float,
+    B2: Float,
+    eps: Float,
+    t: Int
+}
+
+pub struct Network {
+    batch: usize,
+
+    layers: Vec<Layer>,
+
+    n_outputs: Int,
+    outputs: Array<Float, usize>,
+
+    n_inputs: Int,
+    h: Int, w: Int, c: Int,
+
+    policy: LearningRatePolicy,
+    update_args: UpdateArgs,
+
+    time_steps: Uchar,
+    steps: Vec<u32>,
+
+    max_batches: Int,
+    cur_iter: Int,
+
+    batch_size: Int,
+    subdivisions: Int,
+    seen: Int
+    
 }
 
 /*

@@ -1,5 +1,7 @@
+use crate::util::dtypes::*;
+use crate::nn::layer::Layer;
+
 use ndarray::{ArrayView1, ArrayView2, Array1, Array, Dimension, Order, Shape};
-use crate::util::dtypes::Float;
 use std::result::Result;
 use std::fmt;
 
@@ -43,4 +45,14 @@ pub fn mult2by1(a: &ArrayView2<Float>, b: &ArrayView1<Float>) -> Result<Array1<F
 pub fn flatten<D: Dimension> (x: &mut Array<Float, D>) -> Array1<Float>{
     let s = x.raw_dim().size();
     x.to_shape(s).unwrap().to_owned()
+}
+
+fn convolutional_out_height(l: &Layer) -> Int
+{
+    (l.h + 2*l.pad_y - l.kernel_size) / l.stride_y + 1
+}
+
+fn convolutional_out_width(l: &Layer) -> Int
+{
+    (l.w + 2*l.pad_x - l.kernel_size) / l.stride_x + 1
 }
