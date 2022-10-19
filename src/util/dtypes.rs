@@ -1,1 +1,1 @@
-pub type c_float = f32;
+pub type CFloat = f32;

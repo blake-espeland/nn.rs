@@ -1,2 +1,3 @@
-pub mod connection;
-pub mod node;
+pub mod activation;
+pub mod layers;
+pub mod model;
