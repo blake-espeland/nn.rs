@@ -1,10 +1,14 @@
-use crate::util::dtypes::CFloat;
+use crate::util::dtypes::Float;
+use super::layer::Layer;
+use super::state::NetworkState;
 
-use ndarray::{Array, Array1, ArrayView1};
+use ndarray::{Array, ArrayView, arr1, Ix, ArrayView1, Array1};
 
-pub type act_t = fn(x: ArrayView1<CFloat>) -> Array1<CFloat>;
+pub type act_t = fn(l: &mut Layer, s: &mut NetworkState) -> ();
+pub type grad_t = fn(x: Float) -> Float;
 
-pub enum ACT{
+#[allow(non_camel_case_types)]
+pub enum ACTIVATION{
     ID,
     RELU,
     MISH,
@@ -12,26 +16,35 @@ pub enum ACT{
     LOGISTIC
 }
 
-pub fn get_act_f(a: &ACT) -> act_t{
+pub fn get_act_f(a: &ACTIVATION) -> act_t{
     match a {
-        ID => {id_f}
-        RELU => {relu_f}
-        _ => {relu_f}
+        ID => {id}
+        RELU => {relu}
+        _ => {relu}
     }
 }
 
-pub fn get_act_b(a: &ACT) -> act_t{
+pub fn get_gradient(a: &ACTIVATION) -> grad_t{
     match a {
-        ID => {id_b}
-        RELU => {relu_b}
-        _ => {relu_b}
+        ID => {id_grad}
+        RELU => {relu_grad}
+        _ => {id_grad}
     }
 }
 
-fn _relu_f(x: &CFloat) -> CFloat { if x > &0. { *x } else { 0. } }
-pub fn relu_f (x: ArrayView1<CFloat>) -> Array1<CFloat> { x.map(|_x| _relu_f(_x)) }
-fn _relu_b(x: &CFloat) -> CFloat { if x > &0. { 1. } else { 0. } }
-pub fn relu_b(x: ArrayView1<CFloat>) -> Array1<CFloat> { Array1::default(x.len()) }
 
-pub fn id_f (x: ArrayView1<CFloat>) -> Array1<CFloat> { x.to_owned() }
-pub fn id_b (x: ArrayView1<CFloat>) -> Array1<CFloat> { Array1::ones(x.len()) }
+/*
+
+Applies activation to an array of values
+    x -> data to be activated on
+    d -> dimensionality of data
+*/ 
+pub fn activate_array<D>(x: &mut Array<Float, D>, d: Ix, a: ACTIVATION) -> (){
+    
+}
+
+pub fn relu (l: &mut Layer, s: &mut NetworkState) -> (){}
+pub fn relu_grad(x: Float) -> Float { if x > 0. { 1. } else { 0. } }
+
+pub fn id (l: &mut Layer, s: &mut NetworkState) -> () {}
+pub fn id_grad (x: Float) -> Float { x }

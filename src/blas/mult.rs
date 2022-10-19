@@ -1,5 +1,5 @@
 use ndarray::{ArrayView1, ArrayView2, Array1};
-use crate::util::dtypes::CFloat;
+use crate::util::dtypes::Float;
 use std::result::Result;
 use std::fmt;
 
@@ -12,12 +12,12 @@ impl fmt::Display for ArrayMultError {
     }
 }
 
-pub fn mult2by1(a: &ArrayView2<CFloat>, b: &ArrayView1<CFloat>) -> Result<Array1<CFloat>, ArrayMultError> {
+pub fn mult2by1(a: &ArrayView2<Float>, b: &ArrayView1<Float>) -> Result<Array1<Float>, ArrayMultError> {
     if (a.shape()[1] != b.len()){
         return Err(ArrayMultError)
     }
 
-    let mut v = Array1::<CFloat>::zeros(a.shape()[0]);
+    let mut v = Array1::<Float>::zeros(a.shape()[0]);
 
     let mut i: usize = 0;
     let mut j: usize = 0;

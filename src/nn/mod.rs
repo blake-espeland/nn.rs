@@ -1,3 +1,3 @@
 pub mod activation;
-pub mod layers;
-pub mod model;
+pub mod layer;
+pub mod state;

@@ -1,1 +1,1 @@
-pub type CFloat = f32;
+pub type Float = f32; // c-style float

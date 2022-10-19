@@ -11,7 +11,7 @@ pub struct Config{
     pub layers: Vec<JsonValue>
 }
 
-impl Default for Config{
+impl Default for Config {
     fn default() -> Config{
         Config{
             cfg_path: String::new(), 
