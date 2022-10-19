@@ -1,2 +1,2 @@
-pub mod deep;
-pub mod traits;
+pub mod fc;
+pub mod conv;

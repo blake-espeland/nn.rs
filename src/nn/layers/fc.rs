@@ -1,10 +1,16 @@
-use super::traits::FCLayerTrait;
 use crate::util::dtypes::CFloat;
 use crate::blas::mult::*;
 
 use ndarray::{Array2, Array1, ArrayView1};
 
 use crate::nn::activation::*;
+use crate::util::dtypes::*;
+
+pub trait FCLayerTrait: Clone{
+    fn forward(&self, x: &ArrayView1<CFloat>) -> Array1<CFloat>;
+    fn backward(&self, x: &ArrayView1<CFloat>) -> Array1<CFloat>;
+    fn new(i: usize, o: usize, a: ACT, is_input: bool, is_output: bool) -> Self;
+}
 
 #[derive(Clone)]
 pub struct FCLayer{

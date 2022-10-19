@@ -1,4 +1,4 @@
-use super::layers::traits::FCLayerTrait;
+use super::layers::fc::FCLayerTrait;
 use crate::nn::activation::ACT;
 
 pub struct FCModel<M: FCLayerTrait + Default> {
