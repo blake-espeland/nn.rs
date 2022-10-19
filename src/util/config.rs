@@ -1,21 +1,22 @@
-use crate::tensor::shape as shape;
+use json::JsonValue;
+use ndarray::Dim;
 
 pub struct Config{
     pub cfg_path: String,
-    pub net_type: String,
-    pub input_shape: shape::Shape,
-    pub output_shape: shape::Shape,
-    pub n_layers: i32,
+    
+    pub n_layers: usize,
+
+    // list of Strings that represent the different layers
+    // ex. "FCLayer" -> FCLayer
+    pub layers: Vec<JsonValue>
 }
 
 impl Default for Config{
     fn default() -> Config{
         Config{
             cfg_path: String::new(), 
-            net_type: String::new(),
-            input_shape: shape::Shape::default(), 
-            output_shape: shape::Shape::default(),
-            n_layers: 0
+            n_layers: 0,
+            layers: Vec::<JsonValue>::new()
         }
     }
 }
