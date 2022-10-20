@@ -5,12 +5,15 @@
     "Height": 512,
     "Width": 512,
     "Channels": 3,
+    "TimeSteps": 1,
 
     "Momentum": 0.9,
     "Decay": 0.0005,
     "LearningRate": 0.1,
 
-    "MaxBatches": 6000
+    "MaxBatches": 6000,
+    "Policy": "Steps",
+    "Adam": 0
   },
 
   "Layers": [

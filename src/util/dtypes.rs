@@ -13,22 +13,28 @@ pub struct Two<T>{
 }
 
 #[derive(Clone, Copy)]
-pub struct Conv2dShape {
+pub struct DataShape {
     pub b: usize,
     pub h: usize,
     pub w: usize,
     pub c: usize,
 }
 
-impl From<[usize; 4]> for Conv2dShape{
+impl From<[usize; 4]> for DataShape{
     fn from(u: [usize; 4]) -> Self{
-        Conv2dShape { b: u[0], h: u[1], w: u[2], c: u[3] }
+        DataShape { b: u[0], h: u[1], w: u[2], c: u[3] }
     }
 }
 
-impl Conv2dShape {
+impl DataShape {
     pub fn to_arr(&self) -> [usize; 4]{
         [self.b, self.h, self.w, self.c]
+    }
+}
+
+impl Default for DataShape {
+    fn default() -> Self {
+        DataShape { b: 0, h: 0, w: 0, c: 0 }
     }
 }
 

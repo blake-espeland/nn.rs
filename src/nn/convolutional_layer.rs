@@ -9,14 +9,14 @@ use super::{
     state::NetworkState,
 };
 
-trait ConvolutionalLayer {
+pub trait ConvolutionalLayer {
     fn new_conv(
         batch_no: usize,
         steps: usize,
         kernel: usize,
         act: Activation,
-        i_shape: Conv2dShape,
-        o_shape: Conv2dShape,
+        i_shape: DataShape,
+        o_shape: DataShape,
         pad: &Two<usize>,
         stride: &Two<usize>,
     ) -> Self;
@@ -31,8 +31,8 @@ impl ConvolutionalLayer for Layer {
         steps: usize,
         kernel: usize,
         act: Activation,
-        i_shape: Conv2dShape,
-        o_shape: Conv2dShape,
+        i_shape: DataShape,
+        o_shape: DataShape,
         pad: &Two<usize>,
         stride: &Two<usize>,
     ) -> Layer {

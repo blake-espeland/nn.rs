@@ -5,15 +5,15 @@ use super::LearningRatePolicy;
 use crate::util::dtypes::*;
 
 pub struct UpdateArgs {
-    cbatch: Int,
+    cbatch: usize,
     lr: Float,
     momentum: Float,
     decay: Float,
-    adam: Int,
+    adam: usize,
     B1: Float,
     B2: Float,
     eps: Float,
-    t: Int,
+    t: usize,
 }
 
 impl Default for UpdateArgs {
@@ -37,28 +37,28 @@ pub struct Network {
 
     pub layers: Vec<Layer>,
 
-    pub n_outputs: Int,
+    pub n_outputs: usize,
     pub outputs: FloatArr,
 
-    pub n_inputs: Int,
+    pub n_inputs: usize,
     pub inputs: FloatArr,
 
-    pub h: Int,
-    pub w: Int,
-    pub c: Int,
+    pub t: usize,
+    pub h: usize,
+    pub w: usize,
+    pub c: usize,
 
     pub policy: LearningRatePolicy,
     pub update_args: UpdateArgs,
 
-    pub time_steps: Uchar,
-    pub steps: Vec<Int>,
+    pub steps: Vec<usize>,
 
-    pub max_batches: Int,
-    pub cur_iter: Int,
+    pub max_batches: usize,
+    pub cur_iter: usize,
 
-    pub batch_size: Int,
-    pub subdivisions: Int,
-    pub seen: Int,
+    pub batch_size: usize,
+    pub subdivisions: usize,
+    pub seen: usize,
 }
 
 /*
@@ -123,33 +123,34 @@ impl Network {
     }
 
     pub fn new(
-        batch: Int,
-        subdivisions: Int,
-        n_inputs: Int,
-        n_outputs: Int,
-        h: Int,
-        w: Int,
-        c: Int,
-        time_steps: Uchar,
-        i_shape: Shape<IxDyn>,
-        o_shape: Shape<IxDyn>,
+        batch: usize,
+        subdivisions: usize,
+        n_inputs: usize,
+        n_outputs: usize,
+        t: usize,
+        h: usize,
+        w: usize,
+        c: usize,
         policy: LearningRatePolicy,
         ua: UpdateArgs,
-        steps: Vec<Int>,
-        max_batches: Int,
+        steps: Vec<usize>,
+        max_batches: usize,
     ) -> Network {
+        let ishape = Shape::<IxDyn>::from(IxDyn(&[batch, h, w, c]));
+
         Network {
             batch: 0,
 
             layers: Vec::<Layer>::new(),
 
             n_outputs: n_outputs,
-            outputs: FloatArr::zeros(o_shape),
+            outputs: FloatArr::zeros(IxDyn(&[1])),
 
             n_inputs: n_inputs,
-            inputs: FloatArr::zeros(i_shape),
+            inputs: FloatArr::zeros(ishape),
 
             batch_size: batch,
+            t: t,
             h: h,
             w: w,
             c: c,
@@ -157,7 +158,6 @@ impl Network {
             policy: policy,
             update_args: ua,
 
-            time_steps: time_steps,
             steps: steps,
 
             max_batches: max_batches,
@@ -185,6 +185,7 @@ impl Default for Network {
             batch_size: 16,
             subdivisions: 4,
 
+            t: 0,
             h: 0,
             w: 0,
             c: 0,
@@ -192,7 +193,6 @@ impl Default for Network {
             policy: LearningRatePolicy::Steps,
             update_args: UpdateArgs::default(),
 
-            time_steps: 0,
             steps: vec![3600, 4800, 6000],
 
             max_batches: 6000,
