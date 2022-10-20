@@ -3,6 +3,9 @@ pub mod layer;
 pub mod state;
 pub mod network;
 
+pub mod convolutional_layer;
+pub mod connected_layer;
+
 pub enum WeightsTypeT{
     NoWeights, PerFeature, PerChannel
 }

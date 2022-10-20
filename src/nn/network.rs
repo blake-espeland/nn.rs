@@ -1,9 +1,8 @@
-use ndarray::Array;
+use ndarray::{Array, Ix, IxDyn, Shape};
 
-use crate::util::dtypes::*;
 use super::layer::Layer;
 use super::LearningRatePolicy;
-
+use crate::util::dtypes::*;
 
 pub struct UpdateArgs {
     cbatch: Int,
@@ -14,33 +13,52 @@ pub struct UpdateArgs {
     B1: Float,
     B2: Float,
     eps: Float,
-    t: Int
+    t: Int,
+}
+
+impl Default for UpdateArgs {
+    fn default() -> Self {
+        UpdateArgs {
+            cbatch: 4,
+            lr: 0.001,
+            momentum: 0.21,
+            decay: 0.0,
+            adam: 0,
+            B1: 0.0,
+            B2: 0.0,
+            eps: 0.00001,
+            t: 0,
+        }
+    }
 }
 
 pub struct Network {
-    batch: usize,
+    pub batch: usize,
 
-    layers: Vec<Layer>,
+    pub layers: Vec<Layer>,
 
-    n_outputs: Int,
-    outputs: Array<Float, usize>,
+    pub n_outputs: Int,
+    pub outputs: FloatArr,
 
-    n_inputs: Int,
-    h: Int, w: Int, c: Int,
+    pub n_inputs: Int,
+    pub inputs: FloatArr,
 
-    policy: LearningRatePolicy,
-    update_args: UpdateArgs,
+    pub h: Int,
+    pub w: Int,
+    pub c: Int,
 
-    time_steps: Uchar,
-    steps: Vec<u32>,
+    pub policy: LearningRatePolicy,
+    pub update_args: UpdateArgs,
 
-    max_batches: Int,
-    cur_iter: Int,
+    pub time_steps: Uchar,
+    pub steps: Vec<Int>,
 
-    batch_size: Int,
-    subdivisions: Int,
-    seen: Int
-    
+    pub max_batches: Int,
+    pub cur_iter: Int,
+
+    pub batch_size: Int,
+    pub subdivisions: Int,
+    pub seen: Int,
 }
 
 /*
@@ -48,7 +66,7 @@ typedef struct network{
     float *workspace;
     int n;
     int batch;
-	uint64_t *seen;
+    uint64_t *seen;
     float epoch;
     int subdivisions;
     float momentum;
@@ -83,18 +101,104 @@ typedef struct network{
     float exposure;
     float saturation;
     float hue;
-	int small_object;
+    int small_object;
     int gpu_index;
     tree *hierarchy;
     #ifdef GPU
     float *input_state_gpu;
     float **input_gpu;
     float **truth_gpu;
-	float **input16_gpu;
-	float **output16_gpu;
-	size_t *max_input16_size;
-	size_t *max_output16_size;
-	int wait_stream;
+    float **input16_gpu;
+    float **output16_gpu;
+    size_t *max_input16_size;
+    size_t *max_output16_size;
+    int wait_stream;
     #endif
 } network;
 */
+
+impl Network {
+    pub fn add_layer(&mut self, l: Layer) -> () {
+        self.layers.push(l)
+    }
+
+    pub fn new(
+        batch: Int,
+        subdivisions: Int,
+        n_inputs: Int,
+        n_outputs: Int,
+        h: Int,
+        w: Int,
+        c: Int,
+        time_steps: Uchar,
+        i_shape: Shape<IxDyn>,
+        o_shape: Shape<IxDyn>,
+        policy: LearningRatePolicy,
+        ua: UpdateArgs,
+        steps: Vec<Int>,
+        max_batches: Int,
+    ) -> Network {
+        Network {
+            batch: 0,
+
+            layers: Vec::<Layer>::new(),
+
+            n_outputs: n_outputs,
+            outputs: FloatArr::zeros(o_shape),
+
+            n_inputs: n_inputs,
+            inputs: FloatArr::zeros(i_shape),
+
+            batch_size: batch,
+            h: h,
+            w: w,
+            c: c,
+
+            policy: policy,
+            update_args: ua,
+
+            time_steps: time_steps,
+            steps: steps,
+
+            max_batches: max_batches,
+            cur_iter: 0,
+
+            subdivisions: subdivisions,
+            seen: 0,
+        }
+    }
+}
+
+impl Default for Network {
+    fn default() -> Network {
+        Network {
+            batch: 0,
+
+            layers: Vec::<Layer>::new(),
+
+            n_outputs: 1,
+            outputs: FloatArr::zeros(IxDyn(&[1])),
+
+            n_inputs: 1,
+            inputs: FloatArr::zeros(IxDyn(&[1])),
+
+            batch_size: 16,
+            subdivisions: 4,
+
+            h: 0,
+            w: 0,
+            c: 0,
+
+            policy: LearningRatePolicy::Steps,
+            update_args: UpdateArgs::default(),
+
+            time_steps: 0,
+            steps: vec![3600, 4800, 6000],
+
+            max_batches: 6000,
+            cur_iter: 0,
+
+            seen: 0,
+        }
+    }
+}

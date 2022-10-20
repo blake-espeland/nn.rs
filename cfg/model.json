@@ -1,24 +1,46 @@
 {
+  "Hyperparams": {
+    "Batch": 64,
+    "Subdivisions": 8,
+    "Height": 512,
+    "Width": 512,
+    "Channels": 3,
+
+    "Momentum": 0.9,
+    "Decay": 0.0005,
+    "LearningRate": 0.1,
+
+    "MaxBatches": 6000
+  },
+
   "Layers": [
     {
-      "type": "FCLayer",
-      "nodes": 4,
-      "activation": "relu"
+      "Type": "Conv",
+      "Filters": 16,
+      "Stride": 2,
+      "Pad": 0,
+      "Size": 1,
+      "Activation": "leaky"
     },
     {
-      "type": "FCLayer",
-      "nodes": 4,
-      "activation": "relu"
+      "Type": "Connected",
+      "Nodes": 4,
+      "Activation": "relu"
     },
     {
-      "type": "FCLayer",
-      "nodes": 4,
-      "activation": "relu"
+      "Type": "Connected",
+      "Nodes": 4,
+      "Activation": "relu"
     },
     {
-      "type": "FCLayer",
-      "nodes": 4,
-      "activation": "relu"
+      "Type": "Connected",
+      "Nodes": 4,
+      "Activation": "relu"
+    },
+    {
+      "Type": "Connected",
+      "Nodes": 4,
+      "Activation": "relu"
     }
   ]
 }

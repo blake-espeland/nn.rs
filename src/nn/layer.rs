@@ -271,39 +271,32 @@ struct layer {
 
 pub struct Layer {
     // General
-    pub is_input: bool,
-    pub is_output: bool,
-    
+    pub cur_batch: usize,
+
     pub act: ActFn,
     pub act_b: GradFn,
 
     pub layer_delta: FloatArr,
-    pub output: FloatArr,
 
-    pub input_layers: Array<Int, usize>,
+    pub inputs: FloatArr,
+    pub outputs: FloatArr,
+
+    pub input_layers: Vec<usize>,
     
-    pub nweights: Int,
     pub weights: FloatArr,
     pub biases: FloatArr,
 
     pub loss: FloatArr,
     
     // Convolutional
-    pub h: Int, pub w: Int, pub c: Int, pub n: Int, // n = out channels
+    pub b: usize, // batch
+    pub t: usize, // time steps
+    pub h: usize, pub w: usize, pub c: usize, 
+    
+    pub n: usize, // out channels
 
-    pub kernel_size: Int,
-    pub in_channels: Int,
-    pub out_channels: Int,
+    pub kernel_size: usize,
 
-    pub stride_x: Int,
-    pub stride_y: Int,
-    pub pad_x: Int,
-    pub pad_y: Int,
-}
-
-
-trait LayerTrait {
-    fn forward() -> ();
-    fn backward() -> ();
-    fn update() -> ();
+    pub stride: Two<usize>,
+    pub pad: Two<usize>,
 }

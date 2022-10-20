@@ -10,7 +10,7 @@ pub type GradFn = fn(x: Float) -> Float;
 
 
 
-pub fn get_act_f(a: &Activation) -> ActFn{
+pub fn get_act_fn(a: &Activation) -> ActFn{
     match a {
         Activation::ID => {id}
         Activation::Relu => {relu}
@@ -18,7 +18,7 @@ pub fn get_act_f(a: &Activation) -> ActFn{
     }
 }
 
-pub fn get_gradient(a: &Activation) -> GradFn{
+pub fn get_gradient_fn(a: &Activation) -> GradFn{
     match a {
         Activation::ID => {id_grad}
         Activation::Relu => {relu_grad}

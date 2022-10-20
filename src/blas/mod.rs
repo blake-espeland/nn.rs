@@ -47,12 +47,12 @@ pub fn flatten<D: Dimension> (x: &mut Array<Float, D>) -> Array1<Float>{
     x.to_shape(s).unwrap().to_owned()
 }
 
-fn convolutional_out_height(l: &Layer) -> Int
+fn convolutional_out_height(l: &Layer) -> usize
 {
-    (l.h + 2*l.pad_y - l.kernel_size) / l.stride_y + 1
+    (l.h + 2*l.pad.y - l.kernel_size) / l.stride.y + 1
 }
 
-fn convolutional_out_width(l: &Layer) -> Int
+fn convolutional_out_width(l: &Layer) -> usize
 {
-    (l.w + 2*l.pad_x - l.kernel_size) / l.stride_x + 1
+    (l.w + 2*l.pad.x - l.kernel_size) / l.stride.x + 1
 }
