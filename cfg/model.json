@@ -6,16 +6,18 @@
     "Width": 512,
     "Channels": 3,
     "TimeSteps": 1,
-
     "Momentum": 0.9,
     "Decay": 0.0005,
     "LearningRate": 0.1,
-
+    "Steps": [
+      4800,
+      5400,
+      6000
+    ],
     "MaxBatches": 6000,
     "Policy": "Steps",
     "Adam": 0
   },
-
   "Layers": [
     {
       "Type": "Conv",
@@ -26,24 +28,28 @@
       "Activation": "leaky"
     },
     {
-      "Type": "Connected",
-      "Nodes": 4,
+      "Type": "Conv",
+      "Filters": 32,
+      "Stride": 1,
+      "Pad": 0,
+      "Size": 3,
       "Activation": "relu"
     },
     {
-      "Type": "Connected",
-      "Nodes": 4,
-      "Activation": "relu"
+      "Type": "Conv",
+      "Filters": 64,
+      "Stride": 2,
+      "Pad": 1,
+      "Size": 5,
+      "Activation": "leaky"
     },
     {
-      "Type": "Connected",
-      "Nodes": 4,
-      "Activation": "relu"
-    },
-    {
-      "Type": "Connected",
-      "Nodes": 4,
-      "Activation": "relu"
+      "Type": "Conv",
+      "Filters": 128,
+      "Stride": 1,
+      "Pad": 2,
+      "Size": 3,
+      "Activation": "leaky"
     }
   ]
 }

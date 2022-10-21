@@ -269,12 +269,14 @@ struct layer {
 }; 
 */
 
+#[derive(Clone)]
 pub struct Layer {
     // General
     pub cur_batch: usize,
 
-    pub act: ActFn,
-    pub act_b: GradFn,
+    pub act: Activation,
+    pub act_fn: ActFn,
+    pub act_grad: GradFn,
 
     pub layer_delta: FloatArr,
 

@@ -5,15 +5,15 @@ use super::LearningRatePolicy;
 use crate::util::dtypes::*;
 
 pub struct UpdateArgs {
-    cbatch: usize,
-    lr: Float,
-    momentum: Float,
-    decay: Float,
-    adam: usize,
-    B1: Float,
-    B2: Float,
-    eps: Float,
-    t: usize,
+    pub cbatch: usize,
+    pub lr: Float,
+    pub momentum: Float,
+    pub decay: Float,
+    pub adam: usize,
+    pub B1: Float,
+    pub B2: Float,
+    pub eps: Float,
+    pub t: usize,
 }
 
 impl Default for UpdateArgs {

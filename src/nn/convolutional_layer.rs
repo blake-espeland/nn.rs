@@ -1,7 +1,7 @@
-use ndarray::{IxDyn};
+use ndarray::IxDyn;
 
+use super::{get_act_str, Activation};
 use crate::util::dtypes::*;
-use super::Activation;
 
 use super::{
     activation::{get_act_fn, get_gradient_fn},
@@ -14,7 +14,7 @@ pub trait ConvolutionalLayer {
         batch_no: usize,
         steps: usize,
         kernel: usize,
-        act: Activation,
+        act_fn: Activation,
         i_shape: DataShape,
         o_shape: DataShape,
         pad: &Two<usize>,
@@ -23,20 +23,47 @@ pub trait ConvolutionalLayer {
     fn forward_conv(&mut self, net: &NetworkState) -> ();
     fn backward_conv(&mut self, net: &NetworkState) -> ();
     fn update_conv(&mut self, net: &NetworkState) -> ();
+    fn print_conv(&self) -> ();
 }
 
 impl ConvolutionalLayer for Layer {
+    fn print_conv(&self) {
+        let o = self.outputs.shape();
+        println!(
+            "Convolutional ({})\n\
+            \t {} filters \n \
+            \t {}x{} kernel \n \
+            \t {}x{} stride \n \
+            \t {}x{} pad \n \
+            \t {}x{}x{} -> {}x{}x{} \n \
+            ",
+            get_act_str(self.act),
+            self.n,
+            self.kernel_size,
+            self.kernel_size,
+            self.stride.x,
+            self.stride.y,
+            self.pad.x,
+            self.pad.y,
+            self.h,
+            self.w,
+            self.c,
+            o[1],
+            o[2],
+            o[3]
+        )
+    }
+
     fn new_conv(
         batch_no: usize,
         steps: usize,
         kernel: usize,
-        act: Activation,
+        act_fn: Activation,
         i_shape: DataShape,
         o_shape: DataShape,
         pad: &Two<usize>,
         stride: &Two<usize>,
     ) -> Layer {
-
         let n = o_shape.c;
         let c = i_shape.c;
 
@@ -47,8 +74,9 @@ impl ConvolutionalLayer for Layer {
         Layer {
             cur_batch: batch_no,
 
-            act: get_act_fn(&act),
-            act_b: get_gradient_fn(&act),
+            act: act_fn.clone(),
+            act_fn: get_act_fn(&act_fn),
+            act_grad: get_gradient_fn(&act_fn),
             layer_delta: FloatArr::zeros(x_shape.clone()),
 
             outputs: FloatArr::zeros(IxDyn(&o_shape.to_arr())),

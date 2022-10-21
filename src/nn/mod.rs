@@ -15,13 +15,24 @@ pub enum WeightsNormalizationT{
 }
 
 
-#[allow(non_camel_case_types)]
+#[derive(Clone, Copy)]
 pub enum Activation{
     ID,
     Relu,
     Mish,
     Swish,
     Logistic
+}
+
+
+pub fn get_act_str(a: Activation) -> &'static str {
+    match a {
+        Activation::ID => { "Identity" },
+        Activation::Relu => { "ReLu" },
+        Activation::Mish => { "Mish" },
+        Activation::Swish => { "Swish" },
+        Activation::Logistic => { "Logistic" }
+    }
 }
 
 
