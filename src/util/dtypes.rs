@@ -38,3 +38,6 @@ impl Default for DataShape {
     }
 }
 
+pub struct Image {
+    
+}

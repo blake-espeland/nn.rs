@@ -1,5 +1,8 @@
 {
   "Hyperparams": {
+    "TrainPath": "",
+    "ValidPath": "",
+
     "Batch": 64,
     "Subdivisions": 8,
     "Height": 512,
