@@ -7,14 +7,12 @@ use crate::nn::Activation;
 use crate::nn::LearningRatePolicy;
 use crate::util::dtypes::*;
 
-use json::stringify;
 use json::JsonValue;
 use json::JsonValue::Array as JArray;
 use json::JsonValue::Number as JNumber;
 use json::JsonValue::String as JString;
 use num::ToPrimitive;
 
-use std::env;
 use std::fs;
 
 #[inline]
@@ -137,10 +135,11 @@ pub fn parse_cfg(path_cfg: &str) -> Network {
 
     let mut net: Network = Network::new(
         batch,
-        subdiv,
+        json_val_to_string(&hyps["DataPath"]),
         1,
         1,
         t,
+        get_usize(hyps, "TimeSteps"),
         get_usize(hyps, "Height"),
         get_usize(hyps, "Width"),
         get_usize(hyps, "Channels"),
@@ -151,13 +150,13 @@ pub fn parse_cfg(path_cfg: &str) -> Network {
     );
 
     let mut i = 0;
-    let mut ishape = DataShape {
+    let mut ishape = Array4Shape {
         b: net.batch_size,
         h: net.h,
         w: net.w,
         c: net.c,
     };
-    let mut oshape = DataShape::default();
+    let mut oshape = Array4Shape::default();
 
     for layer in layers.members() {
         if layer["Type"] == "Connected" {}
@@ -169,7 +168,7 @@ pub fn parse_cfg(path_cfg: &str) -> Network {
             let s = get_Two(layer, "Stride");
             let p = get_Two(layer, "Pad");
 
-            oshape = DataShape {
+            oshape = Array4Shape {
                 b: net.batch_size,
                 h: convolutional_out_width(ishape.w, k, &s, &p),
                 w: convolutional_out_height(ishape.h, k, &s, &p),

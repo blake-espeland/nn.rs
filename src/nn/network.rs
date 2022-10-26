@@ -1,8 +1,11 @@
 use ndarray::{Array, Ix, IxDyn, Shape};
 
-use super::layer::Layer;
-use super::LearningRatePolicy;
+use super::layer::{Layer};
+use super::{LearningRatePolicy, DefaultBatch};
+use crate::blas::convolutional_out_height;
 use crate::util::dtypes::*;
+
+use super::state::NetworkState;
 
 pub struct UpdateArgs {
     pub cbatch: usize,
@@ -34,14 +37,16 @@ impl Default for UpdateArgs {
 
 pub struct Network {
     pub batch: usize,
+    
+    pub data_path: String, 
 
     pub layers: Vec<Layer>,
 
     pub n_outputs: usize,
-    pub outputs: FloatArr,
+    pub outputs: Array2F,
 
     pub n_inputs: usize,
-    pub inputs: FloatArr,
+    pub inputs: Array4F,
 
     pub t: usize,
     pub h: usize,
@@ -59,6 +64,8 @@ pub struct Network {
     pub batch_size: usize,
     pub subdivisions: usize,
     pub seen: usize,
+
+    pub workspace: Array4F
 }
 
 /*
@@ -124,6 +131,7 @@ impl Network {
 
     pub fn new(
         batch: usize,
+        data_path: String,
         subdivisions: usize,
         n_inputs: usize,
         n_outputs: usize,
@@ -136,18 +144,20 @@ impl Network {
         steps: Vec<usize>,
         max_batches: usize,
     ) -> Network {
-        let ishape = Shape::<IxDyn>::from(IxDyn(&[batch, h, w, c]));
+        let ishape = [batch, h, w, c];
 
         Network {
             batch: 0,
 
+            data_path: data_path,
+
             layers: Vec::<Layer>::new(),
 
             n_outputs: n_outputs,
-            outputs: FloatArr::zeros(IxDyn(&[1])),
+            outputs: Array2F::zeros([n_outputs, 5]),
 
             n_inputs: n_inputs,
-            inputs: FloatArr::zeros(ishape),
+            inputs: Array4F::zeros(ishape),
 
             batch_size: batch,
             t: t,
@@ -165,24 +175,67 @@ impl Network {
 
             subdivisions: subdivisions,
             seen: 0,
+
+            workspace: Array4F::zeros([0, 0, 0, 0]),
         }
     }
+
+    fn update_workspace(&mut self) -> (){}
+
+    fn train_batch(&mut self) -> (){}
+
+    fn forward(&mut self, state: &mut NetworkState) -> () {
+        self.workspace.clone_from(&state.workspace);
+
+        let n = self.layers.len();
+
+        for i in 0..n {
+            state.index = i as i32;
+            let l = &mut self.layers[i];
+
+            l.forward(state);
+
+            state.input.clone_from(&l.outputs);
+        }
+    }
+
+    fn backward(&mut self, state: &mut NetworkState) -> () {
+        /*
+        store original state input and delta
+
+        For each i = n-1 .. 0:
+            state index = i
+            l = self.layers[i]
+
+            (don't modify the 0th layer's )
+
+            l.backward()
+        */
+    }
+
+    pub fn epoch(&mut self, state: &mut NetworkState) -> () {
+        self.forward(state);
+        self.backward(state);
+    }
+
 }
 
 impl Default for Network {
     fn default() -> Network {
         Network {
-            batch: 0,
+            batch: 0, // batch_num = (*net.seen)/(net.batch*net.subdivisions);
+
+            data_path: String::new(),
 
             layers: Vec::<Layer>::new(),
 
             n_outputs: 1,
-            outputs: FloatArr::zeros(IxDyn(&[1])),
+            outputs: Array2F::zeros([0, 0]),
 
             n_inputs: 1,
-            inputs: FloatArr::zeros(IxDyn(&[1])),
+            inputs: Array4F::zeros([0, 0, 0, 0]),
 
-            batch_size: 16,
+            batch_size: DefaultBatch,
             subdivisions: 4,
 
             t: 0,
@@ -197,8 +250,9 @@ impl Default for Network {
 
             max_batches: 6000,
             cur_iter: 0,
-
             seen: 0,
+
+            workspace: Array4F::zeros([0, 0, 0, 0]),
         }
     }
 }

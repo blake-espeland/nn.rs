@@ -9,7 +9,6 @@ pub type ActFn = fn(l: &mut Layer, s: &mut NetworkState) -> ();
 pub type GradFn = fn(x: Float) -> Float;
 
 
-
 pub fn get_act_fn(a: &Activation) -> ActFn{
     match a {
         Activation::ID => {id}

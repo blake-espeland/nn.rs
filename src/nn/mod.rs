@@ -6,6 +6,10 @@ pub mod network;
 pub mod convolutional_layer;
 pub mod connected_layer;
 
+
+const DefaultBatch: usize = 16;
+const DefaultSubdiv: usize = 4;
+
 pub enum WeightsTypeT{
     NoWeights, PerFeature, PerChannel
 }
@@ -45,10 +49,12 @@ pub enum LearningRatePolicy{
     Random
 }
 
+#[derive(Clone)]
 pub enum LayerType{
     Connected, Conv, Normalization, Cost
 }
 
+#[derive(Clone)]
 pub enum CostType{
     SSE, Masked, L1, Seg, Smooth, WGAN
 }

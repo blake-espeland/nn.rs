@@ -1,8 +1,11 @@
-use ndarray::Array;
+use ndarray::{Array, Array2};
 
 use super::activation::*;
-use super::{CostType, Activation};
+use super::state::NetworkState;
+use super::{Activation, CostType, LayerType};
 use crate::util::dtypes::*;
+
+use super::convolutional_layer::*;
 
 /*
 // layer.h
@@ -266,39 +269,54 @@ struct layer {
     tree *softmax_tree;
 
     size_t workspace_size;
-}; 
+};
 */
 
 #[derive(Clone)]
 pub struct Layer {
     // General
-    pub cur_batch: usize,
-
+    pub layer_type: LayerType,
     pub act: Activation,
+    pub cost_type: CostType,
+
+    pub cur_batch: usize,
+    
     pub act_fn: ActFn,
     pub act_grad: GradFn,
 
-    pub layer_delta: FloatArr,
+    pub delta: Array1F,
 
-    pub inputs: FloatArr,
-    pub outputs: FloatArr,
+    pub inputs: Array4F,
+    pub outputs: Array4F,
 
     pub input_layers: Vec<usize>,
-    
-    pub weights: FloatArr,
-    pub biases: FloatArr,
 
-    pub loss: FloatArr,
-    
+    pub weights: Array4F,
+    pub biases: Array1F,
+
+    pub loss: Array1F,
+
     // Convolutional
     pub b: usize, // batch
     pub t: usize, // time steps
-    pub h: usize, pub w: usize, pub c: usize, 
-    
+    pub h: usize,
+    pub w: usize,
+    pub c: usize,
+
     pub n: usize, // out channels
 
     pub kernel_size: usize,
 
     pub stride: Two<usize>,
     pub pad: Two<usize>,
+}
+
+
+impl Layer {
+    pub fn forward(&mut self, state: &mut NetworkState) -> () {
+        match self.layer_type {
+            LayerType::Conv => self.forward_conv(state),
+            _ => ()
+        }
+    }
 }

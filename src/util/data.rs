@@ -1,17 +1,21 @@
-use image::io::Reader as ImageReader;
-use image::RgbImage;
+use image::{io::Reader as ImageReader, Rgb};
+use image::Rgb32FImage;
 use rand::seq::SliceRandom;
 use std::fs;
 use std::path::Path;
+use nshare::ToNdarray3;
+use ndarray::{Ix, Axis};
+
+use super::dtypes::*;
 
 pub enum InputType {
-    Image,
+    Array3F,
     // Video,
     // Text,
     // Num,
     //
 }
-
+#[derive(Debug)]
 pub enum DataLoadingError {
     EmptyDir,
     UnexpSubdir,
@@ -64,7 +68,7 @@ impl Dataset {
             data_dir: data_dir.to_string(),
             data_paths: pv,
 
-            input_type: InputType::Image,
+            input_type: InputType::Array3F,
         })
     }
 
@@ -76,31 +80,29 @@ impl Dataset {
     }
 }
 
-struct DataLoader {
-    dataset: Dataset,
-
-    batch_size: usize,
-    data_buff: Vec<RgbImage>,
+pub struct DataLoader {
+    pub dataset: Dataset,
+    pub batch_size: usize,
 }
 
 impl DataLoader {
-    fn new(ds: Dataset, bs: usize) -> DataLoader {
+    pub fn new(ds: Dataset, bs: usize) -> DataLoader {
         DataLoader {
             dataset: ds,
             batch_size: bs,
-            data_buff: Vec::new(),
         }
     }
 
-    fn get_batch(&self) -> Vec<RgbImage> {
+    pub fn get_batch(&self) -> Array4F {
         let paths = self.dataset.batch_paths(self.batch_size);
-        let mut vi = Vec::<RgbImage>::new();
+        let mut vi: Array4F = Array4F::zeros([0, 0, 0, 0]);
+
         for path in paths {
             let reader = ImageReader::open(path).unwrap();
             let img = reader.decode().unwrap();
-            let rgb = img.into_rgb8();
+            let rgb = img.into_rgb32f();
 
-            vi.push(rgb);
+            vi.push(Axis(0), rgb.into_ndarray3().view()).unwrap();
         }
         vi
     }
