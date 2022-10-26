@@ -9,6 +9,7 @@ Feel free to peek around and gain some inspiration.
 ### TODO
 1. Finish forward pass calculations for convolution.
 2. Finish backward pass calculations for convolution.
+3. Implement activation functions on data
 
 ### Future
 1. Cuda and GPU integration.
