@@ -1,4 +1,4 @@
-use ndarray::{Array1, Array2, Array3, Array4};
+use ndarray::{Array1, Array2, Array3, Array4, ArrayView1};
 use image::Rgb;
 
 pub type Float = f32; // c-style float
